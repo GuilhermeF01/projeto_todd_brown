@@ -1,0 +1,155 @@
+# States Media - Frontend para Análise de Documentos PDF
+# Requisitos e Dependências do Sistema
+
+# =============================================================================
+# FRONTEND REQUIREMENTS
+# =============================================================================
+
+# Navegadores Suportados:
+# - Chrome 90+
+# - Firefox 88+
+# - Safari 14+
+# - Edge 90+
+
+# APIs JavaScript Necessárias:
+# - Fetch API (para requisições HTTP)
+# - FormData API (para upload de arquivos)
+# - File API (para manipulação de arquivos)
+# - LocalStorage API (para persistência de dados)
+# - URL API (para manipulação de URLs)
+# - Navigator.share API (opcional, para compartilhamento)
+# - Navigator.clipboard API (opcional, para copiar links)
+
+# =============================================================================
+# SERVIDOR WEB REQUIREMENTS
+# =============================================================================
+
+# Qualquer servidor web estático:
+# - Apache HTTP Server 2.4+
+# - Nginx 1.18+
+# - Node.js + Express 4.0+
+# - Python HTTP Server (python -m http.server)
+# - Live Server (VS Code Extension)
+# - Netlify, Vercel, GitHub Pages
+
+# =============================================================================
+# N8N WEBHOOK REQUIREMENTS
+# =============================================================================
+
+# N8N Version: 1.0+
+# Webhook Configuration:
+# - Method: POST
+# - Content-Type: multipart/form-data (para upload de arquivos)
+# - CORS habilitado para o domínio do frontend
+
+# Campos esperados no webhook:
+# - file (arquivo PDF)
+# - nome (string)
+# - email (string)
+# - telefone (string)
+# - tipo_analise (string)
+# - origem (string)
+# - timestamp (string ISO)
+# - data (JSON string com todos os dados)
+
+# =============================================================================
+# DEPENDÊNCIAS DE DESENVOLVIMENTO (OPCIONAL)
+# =============================================================================
+
+# Para desenvolvimento local:
+# live-server==1.2.2
+# http-server==14.1.1
+
+# Para build/deploy:
+# netlify-cli==17.0.0
+# vercel==32.0.0
+
+# =============================================================================
+# CONFIGURAÇÕES DE SEGURANÇA
+# =============================================================================
+
+# HTTPS requerido para:
+# - Navigator.share API
+# - Navigator.clipboard API
+# - Geolocation API (se usado no futuro)
+
+# Content Security Policy recomendado:
+# default-src 'self';
+# script-src 'self' 'unsafe-inline';
+# style-src 'self' 'unsafe-inline';
+# img-src 'self' data: https:;
+# connect-src 'self' https://n8neditor.guilhermefraga.tech;
+# font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com;
+
+# =============================================================================
+# LIMITES E CONFIGURAÇÕES
+# =============================================================================
+
+# Upload de arquivos:
+# - Tamanho máximo: 10MB por arquivo
+# - Tipos aceitos: application/pdf, .pdf
+# - Validação client-side e server-side recomendada
+
+# LocalStorage:
+# - Dados do usuário (temporário)
+# - Configurações do webhook
+# - Resultados da análise (temporário)
+
+# =============================================================================
+# INTEGRAÇÃO COM E5 METHOD
+# =============================================================================
+
+# Todd Brown's E5 Method Integration:
+# - Metodologia de análise de documentos
+# - Framework de copywriting
+# - Análise de elementos persuasivos
+
+# =============================================================================
+# MONITORAMENTO E ANALYTICS (OPCIONAL)
+# =============================================================================
+
+# Google Analytics 4
+# Hotjar
+# LogRocket
+# Sentry (para error tracking)
+
+# =============================================================================
+# PERFORMANCE REQUIREMENTS
+# =============================================================================
+
+# Métricas alvo:
+# - First Contentful Paint: < 1.5s
+# - Largest Contentful Paint: < 2.5s
+# - Cumulative Layout Shift: < 0.1
+# - First Input Delay: < 100ms
+
+# Otimizações implementadas:
+# - CSS inline para critical path
+# - JavaScript assíncrono
+# - Imagens otimizadas
+# - Compressão gzip/brotli recomendada
+
+# =============================================================================
+# ACESSIBILIDADE
+# =============================================================================
+
+# WCAG 2.1 AA Compliance:
+# - Contraste de cores adequado
+# - Navegação por teclado
+# - Screen reader compatibility
+# - Semantic HTML
+# - ARIA labels onde necessário
+
+# =============================================================================
+# BACKUP E RECOVERY
+# =============================================================================
+
+# Dados importantes para backup:
+# - Configurações do webhook
+# - Templates de dados
+# - Logs de análises (se implementado)
+
+# Recovery:
+# - LocalStorage pode ser limpo pelo usuário
+# - Dados críticos devem ser salvos no servidor N8N
+# - Implementar fallbacks para configurações perdidas

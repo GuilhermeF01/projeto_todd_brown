@@ -1,0 +1,62 @@
+{
+  "name": "todd-brown-project",
+  "version": "1.0.0",
+  "description": "Todd Brown Project - Frontend para análise de documentos PDF usando E5 Method e integração com N8N webhook",
+  "main": "index.html",
+  "scripts": {
+    "start": "live-server --port=3000 --open=index.html",
+    "dev": "live-server --port=3000 --open=index.html --watch=.",
+    "serve": "http-server -p 3000 -o",
+    "build": "echo 'No build process needed for static HTML/CSS/JS'",
+    "test": "echo 'No tests configured yet'",
+    "deploy:netlify": "netlify deploy --prod --dir=.",
+    "deploy:vercel": "vercel --prod"
+  },
+  "keywords": [
+    "pdf-analyzer",
+    "e5-method",
+    "todd-brown",
+    "todd-brown-project",
+    "n8n-webhook",
+    "document-analysis",
+    "frontend",
+    "html",
+    "javascript",
+    "css"
+  ],
+  "author": "Todd Brown Project",
+  "license": "MIT",
+  "homepage": "https://toddbrown.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/todd-brown-project/pdf-analyzer-frontend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/todd-brown-project/pdf-analyzer-frontend/issues"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "http-server": "^14.1.1",
+    "netlify-cli": "^17.0.0",
+    "vercel": "^32.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ],
+  "files": [
+    "index.html",
+    "resultado.html",
+    "script.js",
+    "config.js",
+    "README.md",
+    "webhook-n8n-guide.md",
+    "exemplo-teste.md"
+  ]
+}

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>States Media - Análise de Documentos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background:
+                linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(20, 20, 20, 0.9) 50%, rgba(0, 0, 0, 0.85) 100%),
+                radial-gradient(circle at 50% 50%, rgba(220, 38, 38, 0.1) 0%, transparent 50%),
+                linear-gradient(45deg, #0a0a0a 0%, #1a1a1a 25%, #0f0f0f 50%, #1a1a1a 75%, #0a0a0a 100%);
+            background-size: 100% 100%, 800px 800px, 200px 200px;
+            background-position: center, center, 0 0;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(220, 38, 38, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        body::after {
+            content: 'STATES MEDIA';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            font-weight: 900;
+            color: rgba(220, 38, 38, 0.08);
+            letter-spacing: 0.5rem;
+            text-align: center;
+            z-index: 2;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 600px;
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            position: relative;
+            z-index: 10;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #dc2626;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            color: #374151;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.75rem;
+            color: #1f2937;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            font-family: inherit;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+            background: white;
+        }
+
+        button {
+            width: 100%;
+            padding: 1.25rem;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.4);
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .response {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 12px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .response.success {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            color: #14532d;
+            border: 2px solid #22c55e;
+        }
+
+        .response.error {
+            background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+            color: #7f1d1d;
+            border: 2px solid #dc2626;
+        }
+
+        .loading {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #dc2626;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        .template-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .template-btn {
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: #1f2937;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .template-btn:hover {
+            background: #dc2626;
+            color: white;
+            border-color: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.4);
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 0.75rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .status-ready {
+            background: #22c55e;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        }
+
+        .status-sending {
+            background: #f59e0b;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+        }
+
+        .status-error {
+            background: #dc2626;
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
+        }
+
+        .powered-by {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .powered-by a {
+            color: #dc2626;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .powered-by a:hover {
+            text-decoration: underline;
+            color: #991b1b;
+        }
+
+        .file-info {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(220, 38, 38, 0.1);
+            border: 2px solid rgba(220, 38, 38, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: #991b1b;
+            flex: 1;
+        }
+
+        .file-size {
+            font-size: 0.9rem;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .remove-file {
+            background: #1f2937;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            width: auto;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .remove-file:hover {
+            background: #111827;
+            transform: scale(1.05);
+        }
+
+        input[type="file"] {
+            padding: 1rem;
+            border: 3px dashed #cbd5e0;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        input[type="file"]:hover {
+            border-color: #dc2626;
+            background: rgba(220, 38, 38, 0.05);
+        }
+
+        .upload-progress {
+            width: 100%;
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .upload-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #dc2626, #991b1b);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Padrão geométrico sutil no fundo */
+        body::before {
+            background-image:
+                linear-gradient(45deg, transparent 40%, rgba(220, 38, 38, 0.03) 50%, transparent 60%),
+                linear-gradient(-45deg, transparent 40%, rgba(220, 38, 38, 0.03) 50%, transparent 60%);
+            background-size: 60px 60px, 60px 60px;
+            background-position: 0 0, 30px 30px;
+        }
+
+        /* Responsividade para o logo de fundo */
+        @media (max-width: 768px) {
+            body::after {
+                font-size: 4rem;
+                letter-spacing: 0.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body::after {
+                font-size: 2.5rem;
+                letter-spacing: 0.1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">STATES MEDIA</div>
+            <div class="subtitle">Análise Inteligente de Documentos com E5 Method</div>
+        </div>
+
+        <form id="n8nForm">
+            <div class="form-group">
+                <label for="webhookUrl">🔗 URL do Webhook N8N:</label>
+                <input type="url" id="webhookUrl" name="webhookUrl"
+                    value="https://n8neditor.guilhermefraga.tech/webhook-test/884d7756-923f-4d06-839d-2c0b02d3513c"
+                    placeholder="https://n8neditor.guilhermefraga.tech/webhook-test/884d7756-923f-4d06-839d-2c0b02d3513c"
+                    required>
+                <button type="button" onclick="testWebhook()" class="template-btn"
+                    style="margin-top: 0.5rem; width: auto; padding: 0.5rem 1rem;">🧪 Testar Webhook</button>
+            </div>
+
+            <div class="form-group" style="display: none;">
+                <label for="method">Método HTTP:</label>
+                <select id="method" name="method">
+                    <option value="POST">POST</option>
+                    <option value="GET">GET</option>
+                    <option value="PUT">PUT</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="userName">👤 Nome completo</label>
+                <input type="text" id="userName" name="userName" placeholder="João Silva" required>
+            </div>
+
+            <div class="form-group">
+                <label for="userEmail">📧 E-mail</label>
+                <input type="email" id="userEmail" name="userEmail" placeholder="joao@email.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="userPhone">📱 Telefone</label>
+                <input type="tel" id="userPhone" name="userPhone" placeholder="+55 11 99999-9999" required>
+            </div>
+
+            <div class="form-group">
+                <label for="pdfFile">📄 Selecione seu PDF para análise</label>
+                <input type="file" id="pdfFile" name="pdfFile" accept=".pdf" onchange="handleFileUpload(this)">
+                <div id="fileInfo" class="file-info" style="display: none;">
+                    <span class="file-name"></span>
+                    <span class="file-size"></span>
+                    <button type="button" class="remove-file" onclick="removeFile()">Remover</button>
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <div class="template-buttons">
+                    <button type="button" class="template-btn" onclick="clearData()">🗑️ Limpar Dados</button>
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn">Iniciar Análise</button>
+        </form>
+
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Processando...</p>
+        </div>
+
+        <div id="response" class="response"></div>
+
+        <div class="powered-by">
+            Powered by <a href="https://statesmedia.com.br/" target="_blank">States Media</a> |
+            Tecnologia E5 Method de Todd Brown
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

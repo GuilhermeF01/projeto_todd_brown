@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todd Brown Project - Resultado da Análise</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: 
+                linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(20, 20, 20, 0.9) 50%, rgba(0, 0, 0, 0.85) 100%),
+                radial-gradient(circle at 50% 50%, rgba(220, 38, 38, 0.1) 0%, transparent 50%),
+                linear-gradient(45deg, #0a0a0a 0%, #1a1a1a 25%, #0f0f0f 50%, #1a1a1a 75%, #0a0a0a 100%);
+            background-size: 100% 100%, 800px 800px, 200px 200px;
+            background-position: center, center, 0 0;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(220, 38, 38, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 1;
+            background-image: 
+                linear-gradient(45deg, transparent 40%, rgba(220, 38, 38, 0.03) 50%, transparent 60%),
+                linear-gradient(-45deg, transparent 40%, rgba(220, 38, 38, 0.03) 50%, transparent 60%);
+            background-size: 60px 60px, 60px 60px;
+            background-position: 0 0, 30px 30px;
+        }
+
+        body::after {
+            content: 'TODD BROWN PROJECT';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            font-weight: 900;
+            color: rgba(220, 38, 38, 0.08);
+            letter-spacing: 0.5rem;
+            text-align: center;
+            z-index: 2;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 800px;
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            position: relative;
+            z-index: 10;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #dc2626;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            color: #374151;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .status-success {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            color: #14532d;
+            border: 2px solid #22c55e;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .status-error {
+            background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+            color: #7f1d1d;
+            border: 2px solid #dc2626;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .result-content {
+            background: rgba(248, 250, 252, 0.8);
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .result-content pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #374151;
+        }
+
+        .result-content h3 {
+            color: #dc2626;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .user-info {
+            background: rgba(220, 38, 38, 0.1);
+            border: 2px solid rgba(220, 38, 38, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .user-info h4 {
+            color: #991b1b;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .user-info p {
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.4);
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: #374151;
+            border: 2px solid #e5e7eb;
+        }
+
+        .btn-secondary:hover {
+            background: #f9fafb;
+            border-color: #dc2626;
+            color: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .powered-by {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .powered-by a {
+            color: #dc2626;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .powered-by a:hover {
+            text-decoration: underline;
+            color: #991b1b;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #dc2626;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            body::after {
+                font-size: 4rem;
+                letter-spacing: 0.2rem;
+            }
+            
+            .container {
+                padding: 2rem;
+                max-width: 95%;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body::after {
+                font-size: 2.5rem;
+                letter-spacing: 0.1rem;
+            }
+            
+            .container {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">TODD BROWN PROJECT</div>
+            <div class="subtitle">Resultado da Análise com E5 Method</div>
+        </div>
+
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Carregando resultado da análise...</p>
+        </div>
+
+        <div id="content" style="display: none;">
+            <div id="status" class="status-success">
+                ✅ Análise concluída com sucesso!
+            </div>
+
+            <div class="user-info">
+                <h4>📋 Dados do Usuário</h4>
+                <p><strong>Nome:</strong> <span id="userName"></span></p>
+                <p><strong>E-mail:</strong> <span id="userEmail"></span></p>
+                <p><strong>Telefone:</strong> <span id="userPhone"></span></p>
+                <p><strong>Arquivo:</strong> <span id="fileName"></span></p>
+            </div>
+
+            <div class="result-content">
+                <h3>📊 Resultado da Análise</h3>
+                <pre id="resultData"></pre>
+            </div>
+
+            <div class="actions">
+                <a href="index.html" class="btn btn-primary">🔄 Nova Análise</a>
+                <button onclick="downloadResult()" class="btn btn-secondary">💾 Baixar Resultado</button>
+                <button onclick="shareResult()" class="btn btn-secondary">📤 Compartilhar</button>
+                <button onclick="debugData()" class="btn btn-secondary" style="background: #6b7280;">🔍 Debug</button>
+            </div>
+        </div>
+
+        <div class="powered-by">
+            Powered by <a href="https://toddbrown.com/" target="_blank">Todd Brown Project</a> |
+            Tecnologia E5 Method de Todd Brown
+        </div>
+    </div>
+
+    <script>
+        // Dados globais
+        let analysisResult = null;
+        let userData = null;
+
+        // Carregar dados da URL ou localStorage
+        function loadResultData() {
+            console.log('Carregando dados do resultado...');
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Tentar carregar dados da URL primeiro
+            const resultParam = urlParams.get('result');
+            const userParam = urlParams.get('user');
+            
+            if (resultParam && userParam) {
+                try {
+                    analysisResult = JSON.parse(decodeURIComponent(resultParam));
+                    userData = JSON.parse(decodeURIComponent(userParam));
+                    console.log('Dados carregados da URL:', { userData, analysisResult });
+                    displayResult();
+                    return;
+                } catch (error) {
+                    console.error('Erro ao decodificar dados da URL:', error);
+                }
+            }
+            
+            // Tentar carregar do localStorage
+            const savedResult = localStorage.getItem('analysis-result');
+            const savedUser = localStorage.getItem('analysis-user');
+            
+            console.log('Verificando localStorage:', {
+                hasResult: !!savedResult,
+                hasUser: !!savedUser,
+                resultLength: savedResult ? savedResult.length : 0,
+                userLength: savedUser ? savedUser.length : 0
+            });
+            
+            if (savedResult && savedUser) {
+                try {
+                    analysisResult = JSON.parse(savedResult);
+                    userData = JSON.parse(savedUser);
+                    console.log('Dados carregados do localStorage:', { userData, analysisResult });
+                    displayResult();
+                    return;
+                } catch (error) {
+                    console.error('Erro ao carregar dados salvos:', error);
+                    console.error('savedResult:', savedResult);
+                    console.error('savedUser:', savedUser);
+                }
+            }
+            
+            // Tentar dados de fallback (para debug)
+            console.log('Tentando dados de fallback...');
+            const fallbackData = localStorage.getItem('analiseData'); // Nome antigo
+            if (fallbackData) {
+                try {
+                    const data = JSON.parse(fallbackData);
+                    if (data.resultado && data.usuario) {
+                        analysisResult = data.resultado;
+                        userData = data.usuario;
+                        console.log('Dados carregados do fallback:', { userData, analysisResult });
+                        displayResult();
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar dados de fallback:', error);
+                }
+            }
+            
+            // Se não encontrou dados, mostrar erro
+            console.error('Nenhum dado encontrado em lugar algum');
+            showError('Nenhum resultado de análise encontrado. Redirecionando para nova análise...');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 5000);
+        }
+
+        function displayResult() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+            
+            // Preencher dados do usuário
+            document.getElementById('userName').textContent = userData.nome || 'N/A';
+            document.getElementById('userEmail').textContent = userData.email || 'N/A';
+            document.getElementById('userPhone').textContent = userData.telefone || 'N/A';
+            document.getElementById('fileName').textContent = userData.arquivo || 'N/A';
+            
+            // Mostrar resultado
+            const resultElement = document.getElementById('resultData');
+            if (typeof analysisResult === 'object') {
+                resultElement.textContent = JSON.stringify(analysisResult, null, 2);
+            } else {
+                resultElement.textContent = analysisResult;
+            }
+            
+            // Determinar status
+            const statusElement = document.getElementById('status');
+            if (analysisResult && !analysisResult.error) {
+                statusElement.className = 'status-success';
+                statusElement.innerHTML = '✅ Análise concluída com sucesso!';
+            } else {
+                statusElement.className = 'status-error';
+                statusElement.innerHTML = '❌ Erro na análise: ' + (analysisResult.error || 'Erro desconhecido');
+            }
+        }
+
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+            
+            const statusElement = document.getElementById('status');
+            statusElement.className = 'status-error';
+            statusElement.innerHTML = '❌ ' + message;
+            
+            document.getElementById('resultData').textContent = 'Nenhum resultado disponível.';
+        }
+
+        function downloadResult() {
+            if (!analysisResult || !userData) {
+                alert('❌ Nenhum resultado disponível para download');
+                return;
+            }
+            
+            try {
+                // Criar objeto completo com todos os dados
+                const completeData = {
+                    metadata: {
+                        projeto: "Todd Brown Project - E5 Method Analysis",
+                        versao: "1.0",
+                        timestamp: new Date().toISOString(),
+                        gerado_em: new Date().toLocaleString('pt-BR')
+                    },
+                    usuario: {
+                        nome: userData.nome || 'N/A',
+                        email: userData.email || 'N/A',
+                        telefone: userData.telefone || 'N/A',
+                        arquivo_analisado: userData.arquivo || 'N/A'
+                    },
+                    resultado_analise: analysisResult,
+                    metodologia: {
+                        nome: "E5 Method",
+                        criador: "Todd Brown",
+                        pilares: [
+                            "Envision - Visualização do resultado desejado",
+                            "Empathize - Compreensão das dores do cliente",
+                            "Educate - Educação sobre a solução",
+                            "Enroll - Inscrição/conversão do prospect",
+                            "Experience - Experiência de transformação"
+                        ]
+                    }
+                };
+                
+                // Criar o blob com formatação bonita
+                const jsonString = JSON.stringify(completeData, null, 2);
+                const blob = new Blob([jsonString], { 
+                    type: 'application/json;charset=utf-8' 
+                });
+                
+                // Criar nome do arquivo com data/hora
+                const now = new Date();
+                const dateStr = now.toISOString().split('T')[0]; // YYYY-MM-DD
+                const timeStr = now.toTimeString().split(' ')[0].replace(/:/g, '-'); // HH-MM-SS
+                const userName = userData.nome ? userData.nome.replace(/[^a-zA-Z0-9]/g, '-') : 'usuario';
+                const fileName = `analise-e5-method-${userName}-${dateStr}-${timeStr}.json`;
+                
+                // Criar e disparar o download
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                a.style.display = 'none';
+                
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                // Limpar o URL do objeto
+                setTimeout(() => URL.revokeObjectURL(url), 100);
+                
+                // Mostrar feedback de sucesso
+                const originalText = event.target.textContent;
+                event.target.textContent = '✅ Download iniciado!';
+                event.target.style.background = '#22c55e';
+                
+                setTimeout(() => {
+                    event.target.textContent = originalText;
+                    event.target.style.background = '';
+                }, 2000);
+                
+                console.log('Download do resultado iniciado:', fileName);
+                
+            } catch (error) {
+                console.error('Erro ao fazer download:', error);
+                alert('❌ Erro ao gerar arquivo de download. Tente novamente.');
+            }
+        }
+
+        function shareResult() {
+            if (navigator.share && analysisResult) {
+                navigator.share({
+                    title: 'Resultado da Análise - Todd Brown Project',
+                    text: 'Confira o resultado da minha análise com E5 Method',
+                    url: window.location.href
+                });
+            } else {
+                // Fallback: copiar URL para clipboard
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    alert('Link copiado para a área de transferência!');
+                }).catch(() => {
+                    alert('Não foi possível copiar o link. URL: ' + window.location.href);
+                });
+            }
+        }
+
+        function debugData() {
+            const debugInfo = {
+                localStorage: {
+                    'analysis-result': localStorage.getItem('analysis-result'),
+                    'analysis-user': localStorage.getItem('analysis-user'),
+                    'analiseData': localStorage.getItem('analiseData'),
+                    'n8n-frontend-data': localStorage.getItem('n8n-frontend-data')
+                },
+                currentData: {
+                    analysisResult: analysisResult,
+                    userData: userData
+                },
+                url: {
+                    href: window.location.href,
+                    search: window.location.search,
+                    params: Object.fromEntries(new URLSearchParams(window.location.search))
+                }
+            };
+            
+            console.log('=== DEBUG INFO ===');
+            console.log(debugInfo);
+            
+            // Mostrar em alert também
+            const summary = `
+DEBUG INFO:
+- localStorage analysis-result: ${debugInfo.localStorage['analysis-result'] ? 'EXISTS' : 'MISSING'}
+- localStorage analysis-user: ${debugInfo.localStorage['analysis-user'] ? 'EXISTS' : 'MISSING'}
+- Current analysisResult: ${analysisResult ? 'EXISTS' : 'MISSING'}
+- Current userData: ${userData ? 'EXISTS' : 'MISSING'}
+- URL params: ${Object.keys(debugInfo.url.params).length} found
+
+Veja o console (F12) para detalhes completos.
+            `;
+            
+            alert(summary);
+        }
+
+        // Inicializar quando a página carregar
+        document.addEventListener('DOMContentLoaded', loadResultData);
+    </script>
+</body>
+
+</html>
